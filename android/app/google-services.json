@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "57101567076",
+    "project_id": "oversized-recyclable-items",
+    "storage_bucket": "oversized-recyclable-items.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57101567076:android:6c7be7841538813b314b71",
+        "android_client_info": {
+          "package_name": "com.example.oversized_recyclable_items_ecosystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAniwGEs9cyDXNT9iG3L76fkn_NLZYCXeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,6 @@ class LargeStorePage extends StatefulWidget {
 class _LargeStorePageState extends State<LargeStorePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Center(child: Text("STORE PAGE"),);
   }
 }

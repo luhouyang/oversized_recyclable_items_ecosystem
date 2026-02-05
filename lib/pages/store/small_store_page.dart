@@ -10,6 +10,6 @@ class SmallStorePage extends StatefulWidget {
 class _SmallStorePageState extends State<SmallStorePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Center(child: Text("STORE PAGE"),);
   }
 }

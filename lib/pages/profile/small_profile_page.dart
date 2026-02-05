@@ -10,6 +10,6 @@ class SmallProfilePage extends StatefulWidget {
 class _SmallProfilePageState extends State<SmallProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Center(child: Text("PROFILE PAGE"),);
   }
 }
