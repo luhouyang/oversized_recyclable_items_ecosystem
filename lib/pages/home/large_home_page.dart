@@ -372,7 +372,7 @@ class _LargeHomePageState extends State<LargeHomePage> {
                   if(!isEditing)
                   IconButton(
                     icon: const Icon(Icons.auto_awesome),
-                    color: Colors.purple,
+                    color: Colors.lightBlueAccent,
                     tooltip: "Magic Fill Description",
                     onPressed: () {
                          _magicWrite(nameController, descController, priceController);
@@ -531,7 +531,7 @@ class _LargeHomePageState extends State<LargeHomePage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context), 
-                  child: Text("Cancel", style: TextStyle(color: UIColor().gray))
+                  child: Text("Cancel", style: TextStyle(color: Colors.redAccent))
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(

@@ -44,10 +44,10 @@ final ThemeData lightTheme = ThemeData(
       ),
     ),
     headlineMedium: GoogleFonts.inter(
-      textStyle: TextStyle(color: UIColor().white, fontSize: 20, fontWeight: FontWeight.w500),
+      textStyle: TextStyle(color: UIColor().primaryColorLight, fontSize: 20, fontWeight: FontWeight.w500),
     ),
     headlineSmall: GoogleFonts.inter(
-      textStyle: TextStyle(color: UIColor().white, fontSize: 16, fontWeight: FontWeight.w500),
+      textStyle: TextStyle(color: UIColor().primaryColorLight, fontSize: 16, fontWeight: FontWeight.w500),
     ),
     bodyMedium: GoogleFonts.inter(textStyle: TextStyle(color: UIColor().primaryColorLight)),
     labelLarge: GoogleFonts.inter(textStyle: TextStyle(color: UIColor().springGreen)),
@@ -90,7 +90,7 @@ final ThemeData lightTheme = ThemeData(
     contentTextStyle: GoogleFonts.inter(textStyle: TextStyle(color: UIColor().primaryColorLight)),
   ),
   scrollbarTheme: ScrollbarThemeData(thumbColor: WidgetStatePropertyAll(UIColor().springGreen)),
-  cardTheme: CardTheme(color: UIColor().whiteSmoke, elevation: 3),
+  cardTheme: CardThemeData(color: UIColor().whiteSmoke, elevation: 3),
   highlightColor: UIColor().springGreen,
   dividerTheme: DividerThemeData(color: UIColor().primaryColorLight, thickness: 1.5),
   useMaterial3: true,
@@ -162,10 +162,10 @@ final ThemeData darkTheme = ThemeData(
     contentTextStyle: GoogleFonts.inter(textStyle: TextStyle(color: UIColor().darkGray)),
   ),
   scrollbarTheme: ScrollbarThemeData(thumbColor: WidgetStatePropertyAll(UIColor().springGreen)),
-  cardTheme: CardTheme(color: UIColor().mediumGray),
+  cardTheme: CardThemeData(color: UIColor().mediumGray),
   highlightColor: UIColor().springGreen,
   dividerTheme: DividerThemeData(color: UIColor().primaryColorDark, thickness: 1.5),
-  dialogTheme: DialogTheme(
+  dialogTheme: DialogThemeData(
     backgroundColor: UIColor().mediumGray,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   ),

@@ -289,7 +289,7 @@ class _LargeStorePageState extends State<LargeStorePage> {
                   // GRID VIEW
                   return GridView.builder(
                     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 250,
+                      maxCrossAxisExtent: 300,
                       childAspectRatio: 0.7,
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,

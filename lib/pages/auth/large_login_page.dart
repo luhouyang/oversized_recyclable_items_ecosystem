@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart' as sign_in;
 import 'package:oversized_recyclable_items_ecosystem/entities/user_entity.dart';
 import 'package:oversized_recyclable_items_ecosystem/services/storage/firestore_service.dart';
 import 'package:oversized_recyclable_items_ecosystem/widgets/snack_bar_text.dart';
@@ -19,16 +22,69 @@ class _LargeLoginPageState extends State<LargeLoginPage> {
   Future<void> _signInWithGoogle() async {
     setState(() => isLoading = true);
     try {
-      // Create a new provider
-      GoogleAuthProvider googleProvider = GoogleAuthProvider();
+      UserCredential userCredential;
 
-      // Trigger the auth flow
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      if (kIsWeb) {
+        // Web Flow
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        userCredential = await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      } else {
+        // Mobile/Desktop Flow using google_sign_in 7.2.0+
+        final sign_in.GoogleSignIn googleSignIn = sign_in.GoogleSignIn.instance;
+        
+        // IMPORTANT: Android requires the Web Client ID to generate an idToken for Firebase.
+        // Replace this with your Web client ID from Firebase Console -> Authentication -> Sign-in method -> Google -> Web SDK configuration
+        const String serverClientId = '57101567076-9qmp8u0j6qh7ste5ojh0vtaglgrd2mm9.apps.googleusercontent.com';
+        
+        await googleSignIn.initialize(serverClientId: serverClientId);
+        
+        final Completer<sign_in.GoogleSignInAccount?> completer = Completer();
+        
+        final StreamSubscription<sign_in.GoogleSignInAuthenticationEvent> subscription = 
+            googleSignIn.authenticationEvents.listen((event) {
+          if (event is sign_in.GoogleSignInAuthenticationEventSignIn) {
+            if (!completer.isCompleted) completer.complete(event.user);
+          } else if (event is sign_in.GoogleSignInAuthenticationEventSignOut) {
+            if (!completer.isCompleted) completer.complete(null);
+          }
+        });
+
+        try {
+          // Trigger the authentication flow
+          if (googleSignIn.supportsAuthenticate()) {
+            await googleSignIn.authenticate();
+          } else {
+            await googleSignIn.attemptLightweightAuthentication();
+          }
+        } catch (e) {
+          if (!completer.isCompleted) completer.completeError(e);
+        }
+
+        // Wait for the user account from the stream
+        final sign_in.GoogleSignInAccount? googleUser = await completer.future.timeout(
+          const Duration(minutes: 5), // generous timeout in case user idles on the dialog
+          onTimeout: () => null,
+        );
+        
+        await subscription.cancel();
+
+        if (googleUser == null) {
+          setState(() => isLoading = false);
+          return;
+        }
+
+        final sign_in.GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        
+        // Construct credential using idToken (omitting accessToken as per new API)
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+        );
+
+        userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      }
 
       if (userCredential.user != null) {
         User user = userCredential.user!;
-        
-        // Check if user exists, if not create new
         UserEntity? existingUser = await _firestoreService.getUser(user.uid);
         
         if (existingUser == null) {
@@ -40,8 +96,6 @@ class _LargeLoginPageState extends State<LargeLoginPage> {
             );
             await _firestoreService.saveUser(newUser);
         }
-        
-        // Navigation is usually handled by the auth state listener in NavigatorPage/Main
       }
     } catch (e) {
       if(mounted) SnackBarText().showBanner(msg: "Login Failed: $e", context: context);
@@ -88,7 +142,6 @@ class _LargeLoginPageState extends State<LargeLoginPage> {
               ),
               const SizedBox(height: 48),
               
-              // Google Login Button
               isLoading 
               ? const CircularProgressIndicator()
               : ElevatedButton.icon(
@@ -107,8 +160,6 @@ class _LargeLoginPageState extends State<LargeLoginPage> {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                   // If guest mode is allowed, navigate manually or handle state
-                   // For now, this is just a placeholder action
                    SnackBarText().showBanner(msg: "Guest mode not fully implemented yet", context: context);
                 },
                 child: Text(
